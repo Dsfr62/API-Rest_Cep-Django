@@ -1,44 +1,26 @@
 from cgitb import html
+import site
 from django.shortcuts import render, HttpResponse
-import datetime
+from core.models import loc
+from rest_framework.views import APIView
 from django.http import JsonResponse
-import json
-from pprint import pprint
 
 # Create your views here.
 
-def info_cep_49045083(request):
-    info = '''
-    {
-        "CEP": "49045-083",
-        "Endereco": "Rua Matilde Silva Lima",
-        "Numero": "550",
-        "Bairro": "Luzia"
-    }
-    '''
-    data = json.loads(info)
-    return JsonResponse(data)
 
-def info_cep_49026900(request):
-    info = '''
-    {
-        "CEP": "49026-900",
-        "Endereco": "Avenida Ministro Geraldo Barreto Sobral",
-        "Numero": "215",
-        "Bairro": "Jardins"
-    }
-    '''
-    data = json.loads(info)
-    return JsonResponse(data)
 
-def info_cep_49032490(request):
-    info = '''
-    {
-        "CEP": "49032-490",
-        "Endereco": "Avenida Murilo Dantas",
-        "Numero": "300",
-        "Bairro": "Farolandia"
-    }
-    '''
-    data = json.loads(info)
-    return JsonResponse(data)
+def all_ceps(request):
+    cep = loc.objects.all()
+    dados = {'ceps': cep}
+    return render(request, 'index.html', dados)
+
+def cep_json(request, cep):
+    try:
+        cep = loc.objects.get(cep=cep)
+        dados = {'loc': cep}
+        return JsonResponse(status=200, data=dados)
+    except:
+        dados ={
+            "Cep": "Cep nao existe"
+        }
+        return JsonResponse(status=200, data=dados)
