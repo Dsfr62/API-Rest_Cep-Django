@@ -17,13 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from core import views
 
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('cep/', views.all_ceps),
-    path('cep/<int:cep>', views.cep_json)
+    path('cep/<int:cp>', views.cep_json)
 ]
-
-
-# Subir dois container docker

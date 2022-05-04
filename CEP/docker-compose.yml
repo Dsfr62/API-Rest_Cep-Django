@@ -1,0 +1,43 @@
+version: "3.8"
+services:
+  
+  
+  web:
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    image: api_cep
+    volumes:  
+      - .:/code
+    ports:
+      - 8000:8000
+    restart: always
+    depends_on:
+      - postgres
+    stdin_open: true
+    tty: true
+    networks:
+      - minha-rede
+
+
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - minha-rede
+    ports:
+      - 5432:5432
+
+
+volumes:
+  postgres_data:
+
+networks:
+   minha-rede:
+    name: minha-rede
+    driver: bridge
